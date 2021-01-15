@@ -14,12 +14,3 @@ jobs:
           owner: NobyDa # fork 上游项目 owner
           head: master # fork 上游项目需要同步的分支
           base: master # 需要同步到本项目的目标分支
-
-
-      - name: Telegram Notify
-        uses: yanzay/notify-telegram@v0.1.0
-        if: always()
-        with:
-          chat: ${{ secrets.TELEGRAM_TO}}
-          token: ${{ secrets.TELEGRAM_TOKEN}}
-          status: ${{ job.status }}
