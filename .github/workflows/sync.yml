@@ -1,0 +1,25 @@
+# .github/workflows/sync.yml
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # 每小时 0分触发, 对于一些更新不那么频繁的项目可以设置为每天一次, 低碳一点
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tgymnich/fork-sync@v1.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 这个 token action 会默认配置, 这里只需这样写就行
+          owner: NobyDa # fork 上游项目 owner
+          head: master # fork 上游项目需要同步的分支
+          base: master # 需要同步到本项目的目标分支
+
+
+      - name: Telegram Notify
+        uses: yanzay/notify-telegram@v0.1.0
+        if: always()
+        with:
+          chat: ${{ secrets.TELEGRAM_TO}}
+          token: ${{ secrets.TELEGRAM_TOKEN}}
+          status: ${{ job.status }}
